@@ -199,3 +199,33 @@ exports.refreshUserToken = async (req, res) => {
     return CommonService.filterError(error, req, res);
   }
 };
+
+
+exports.signInWithGoogle = async (req , res) => {
+  try {
+     let {id , email , verified_email , name , given_name , family_name , picture} = req.body;
+    console.log("i am hit my self successfully:::::::" , email)
+      // Validate the response  
+    if (!verified_email) {  
+      return res.status(401).send({ error: 'Email not verified' });  
+    }  
+   
+   // Create a user account (if necessary)  
+   const user = await AuthServices.createUserIfNotExists(email, name, given_name, family_name , picture);  
+   
+   // Generate a session token or JWT  
+   const token = await AuthServices.generateJWTAccessToken(user.id);
+   // Removing non Sharing Keys
+   delete user.password;
+   delete user.verification_token;
+
+   return res.REST.SUCCESS(1, "Logged In Successfully", {
+     user,
+     token: token,
+   });
+
+
+  }catch(error) {
+    await CommonService.filterError(error, req, res);
+  }
+}

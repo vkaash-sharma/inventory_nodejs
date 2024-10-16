@@ -104,5 +104,7 @@
 	"[1].taskOwners[1].meeting_task_id is required": "[1].taskOwners[1].meeting_task_id is required",
 	"[4].taskOwners[0].meeting_task_id is required": "[4].taskOwners[0].meeting_task_id is required",
 	"email is not allowed": "email is not allowed",
-	"User Not Found!": "User Not Found!"
+	"User Not Found!": "User Not Found!",
+	"Email is Required": "Email is Required",
+	"No Companies Found": "No Companies Found"
 }

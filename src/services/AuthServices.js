@@ -2,7 +2,8 @@ const models = require('../models/index');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {v4: uuidv4} = require('uuid');
-
+const { saveNewUser, getSingleUserByID } = require('./UserServices');
+const CommonService  = require('./CommonService')
 exports.GenerateVerifyUrl = async (prefix, id) => {
     try {
         if (!prefix || !id) {
@@ -116,3 +117,36 @@ exports.comparePassword = async (oldPassword, password) => {
         return false;
     }
 }
+
+
+// Helper function to create a user account if it doesn't exist  
+exports.createUserIfNotExists = async (email, name, given_name, family_name , picture) => {  
+   try {
+    let options = {
+        where : {
+            email : email ,
+            deleted : 0
+        }
+    }
+    const existingUser = await getSingleUserByID(options);  
+    if (existingUser) return existingUser;  
+    let newUserObj = {
+        firstName: given_name,
+        lastName : family_name ,
+        email: email,
+        profilePicture :picture ,
+        mobile: null,
+        password: null,
+        isInvited : 1 ,
+        invitedBy : 1 ,
+        isRegisterationCompleted : 1 ,
+        emaiVerifiedAt : 0 ,
+        isActive : 1
+    }
+    let createNewUser = await saveNewUser(newUserObj);
+    return createNewUser
+   }catch(error) {
+    console.log("here is the error ::: " , error);
+    return false;
+   }
+  }

@@ -7,6 +7,7 @@ const {PasswordValidation, LoginValidation, ForgotPassValidation} = require('../
 
 /* Login Route */
 AuthRouter.post('/login', apiValidator(LoginValidation), authController.login);
+AuthRouter.post('/login-google', authController.signInWithGoogle);
 
 //verify account
 AuthRouter.post('/account-verify/generate', authController.newVerificationLink);
